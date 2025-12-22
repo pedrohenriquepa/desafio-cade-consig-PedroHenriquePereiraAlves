@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TipoPlano {
+  BASICO
+  PRO
+  ENTERPRISE
+}
+
+enum StatusContrato {
+  ATIVO
+  INATIVO
+}
+
+model Contrato {
+  id_contrato  String         @id @default(uuid())
+  nome_cliente String
+  email_cliente String
+  tipo_plano   TipoPlano
+  valor_mensal Decimal        @db.Decimal(10, 2)
+  status       StatusContrato
+  data_inicio  DateTime
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+
+  @@map("contratos")
+}
+
+model Usuario {
+  id_usuario String   @id @default(uuid())
+  usuario    String   @unique
+  senha_hash String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("usuarios")
+}
